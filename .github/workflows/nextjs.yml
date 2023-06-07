@@ -29,6 +29,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    # 追記
     environment: github-pages
     env:
       BRANCH_NAME: ${{ vars.BRANCH_NAME }}
