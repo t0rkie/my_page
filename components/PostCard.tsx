@@ -10,7 +10,7 @@ interface Post {
 
 const PostCard = ({ post }: Post) => {
   return (
-    <Link href={`/post/${post.slug}`}>
+    <Link href={`/posts/${post.slug}`}>
       <div className='border roounded-lg'>
         <Image
           src={`/${post.frontMatter.image}`}
