@@ -1,5 +1,6 @@
 import fs from 'fs'
 import matter from 'gray-matter'
+import { marked } from 'marked'
 
 interface Params {
   params: {
@@ -41,9 +42,9 @@ export async function getStaticPaths() {
 
 const Post = ({ frontMatter, content }: Props) => {
   return (
-    <div>
+    <div className='prose'>
       <h1>{ frontMatter.title }</h1>
-      <div>{ content }</div>
+      <div dangerouslySetInnerHTML={{ __html: marked(content) }} ></div>
     </div>
   )
 }
