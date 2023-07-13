@@ -1,6 +1,7 @@
 import fs from 'fs'
 import matter from 'gray-matter'
 import { marked } from 'marked'
+import Image from 'next/image'
 
 interface Params {
   params: {
@@ -42,8 +43,17 @@ export async function getStaticPaths() {
 
 const Post = ({ frontMatter, content }: Props) => {
   return (
-    <div className='prose'>
-      <h1>{ frontMatter.title }</h1>
+    <div className='prose prose-lg max-w-none'>
+      <div className='border'>
+        <Image
+          src={`/${frontMatter.image}`}
+          width={1200}
+          height={700}
+          alt={frontMatter.title}
+        />
+      </div>
+      <h1 className='mt-12'>{ frontMatter.title }</h1>
+      <span>{ frontMatter.date }</span>
       <div dangerouslySetInnerHTML={{ __html: marked(content) }} ></div>
     </div>
   )
