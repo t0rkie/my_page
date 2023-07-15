@@ -17,6 +17,7 @@ const PostCard = ({ post }: Post) => {
           width={1200}
           height={700}
           alt={post.frontMatter.title}
+          // priority={true}
         />
       </div>
       <div className='px-2 py-4'>

@@ -1,28 +1,39 @@
 import fs from 'fs'
 import matter from 'gray-matter'
-import { marked } from 'marked'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
 import Image from 'next/image'
+import { NextSeo } from 'next-seo'
 
 interface Params {
   params: {
-    slug: string
+    slug: String
     frontMatter: any
   }
 }
 
 interface Props {
   frontMatter: any
-  content: any
+  content: any,
+  slug: String
 }
 
 export async function getStaticProps({ params }: Params) {
   const file = fs.readFileSync(`posts/${params.slug}.md`, 'utf-8')
   const { data, content } = matter(file)
 
+  const result = await unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process(content)
+
   return {
     props: {
       frontMatter: data,
-      content
+      content: result.toString()
     }
   }
 }
@@ -34,28 +45,48 @@ export async function getStaticPaths() {
       slug: fileName.replace(/\.md$/, '')
     }
   }))
-  console.log('paths: ', paths)
   return {
     paths,
     fallback: false,
   }
 }
 
-const Post = ({ frontMatter, content }: Props) => {
+const Post = ({ frontMatter, content, slug }: Props) => {
   return (
-    <div className='prose prose-lg max-w-none'>
-      <div className='border'>
-        <Image
-          src={`/${frontMatter.image}`}
-          width={1200}
-          height={700}
-          alt={frontMatter.title}
-        />
+    <>
+      <NextSeo
+        title={frontMatter.title}
+        description={frontMatter.description}
+        openGraph={{
+          type: 'website',
+          url: `http:localhost:3000/posts/${slug}`,
+          title: frontMatter.title,
+          description: frontMatter.description,
+          images: [
+            {
+              url: `https://localhost:3000/${frontMatter.image}`,
+              width: 1200,
+              height: 700,
+              alt: frontMatter.title,
+            }
+          ]
+        }}
+      />
+      <div className='prose prose-lg max-w-none'>
+        <div className='border'>
+          <Image
+            src={`/${frontMatter.image}`}
+            width={1200}
+            height={700}
+            alt={frontMatter.title}
+            // priority={false}
+          />
+        </div>
+        <h1 className='mt-12'>{ frontMatter.title }</h1>
+        <span>{ frontMatter.date }</span>
+        <div dangerouslySetInnerHTML={{ __html: content }} ></div>
       </div>
-      <h1 className='mt-12'>{ frontMatter.title }</h1>
-      <span>{ frontMatter.date }</span>
-      <div dangerouslySetInnerHTML={{ __html: marked(content) }} ></div>
-    </div>
+    </>
   )
 }
 
