@@ -5,6 +5,8 @@ description: 'キャッシュの入門記事です'
 image: nextjs.png
 ---
 
+## Table of Contents
+
 キャッシュの性質
 
 - 特定のクライアントのみが参照可能なキャッシュ (private cache)
