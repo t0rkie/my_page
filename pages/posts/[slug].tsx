@@ -8,6 +8,8 @@ import remarkToc from 'remark-toc'
 import rehypeSlug from 'rehype-slug'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
+import remakrkPrism from 'remark-prism'
+import remarkPrism from 'remark-prism'
 
 interface Params {
   params: {
@@ -28,6 +30,9 @@ export async function getStaticProps({ params }: Params) {
 
   const result = await unified()
     .use(remarkParse)
+    .use(remarkPrism, {
+      /* options */
+    })
     .use(remarkToc, {
       heading: '目次'
     })
