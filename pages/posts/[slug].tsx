@@ -32,6 +32,7 @@ export async function getStaticProps({ params }: Params) {
     .use(remarkParse)
     .use(remarkPrism, {
       /* options */
+      plugins: ['line-numbers']
     })
     .use(remarkToc, {
       heading: '目次'
