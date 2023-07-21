@@ -17,7 +17,7 @@ Next.js を使って Markdown のブログサイトの構築を一から行な�
 
 npx create-next-app コマンドを利用して Next.js プロジェクトの作成を行います。
 
-```js
+```js[class="line-numbers"]
 import Layout from '../components/layout';
 import '../styles/globals.css';
 import '../styles/prism.css';
