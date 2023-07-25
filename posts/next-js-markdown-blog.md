@@ -35,3 +35,5 @@ function MyApp({ Component, pageProps }) {
 
 export default MyApp;
 ```
+
+[戻る](/)
