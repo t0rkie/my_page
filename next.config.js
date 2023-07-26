@@ -6,6 +6,9 @@ const nextConfig = {
   reactStrictMode: true,
   assetPrefix: branchName,
   basePath: branchName,
+  images: {
+    domains: ['localhost']
+  }
 };
 
 module.exports = nextConfig;

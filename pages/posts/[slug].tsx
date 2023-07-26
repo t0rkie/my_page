@@ -4,12 +4,15 @@ import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
+import rehypeParse from 'rehype-parse/lib'
+import rehypeReact from 'rehype-react/lib'
 import remarkToc from 'remark-toc'
 import rehypeSlug from 'rehype-slug'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
-import remakrkPrism from 'remark-prism'
 import remarkPrism from 'remark-prism'
+import { createElement, Fragment } from 'react'
+import Link from 'next/link'
 
 interface Params {
   params: {
@@ -37,9 +40,9 @@ export async function getStaticProps({ params }: Params) {
     .use(remarkToc, {
       heading: '目次'
     })
-    .use(remarkRehype)
+    .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeSlug)
-    .use(rehypeStringify)
+    .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content)
 
   return {
@@ -96,10 +99,44 @@ const Post = ({ frontMatter, content, slug }: Props) => {
         </div>
         <h1 className='mt-12'>{ frontMatter.title }</h1>
         <span>{ frontMatter.date }</span>
-        <div dangerouslySetInnerHTML={{ __html: content }} ></div>
+        { toReactNode(content) }
       </div>
     </>
   )
+}
+
+const toReactNode = (content: any) => {
+  return unified()
+    .use(rehypeParse, {
+      fragment: true,
+    })
+    .use(rehypeReact, {
+      createElement,
+      Fragment,
+      components: {
+        a: MyLink,
+        img: MyImage
+      }
+    })
+    .processSync(content).result
+}
+
+const MyLink = ({ children, href }: any) => {
+  if (href === '') href='/'
+
+  return href.startsWith('/') || href.startsWith('#') ? (
+    <Link href={href}>
+      { children }
+    </Link>
+  ) : (
+    <a href={href} target='_blank' rel='noopener noreferrer'>
+      { children }
+    </a>
+  )
+}
+
+const MyImage = ({ src, alt, ...props }: any) => {
+  return <Image src={src} alt={alt} {...props} />
 }
 
 export default Post

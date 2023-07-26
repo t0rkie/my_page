@@ -36,4 +36,8 @@ function MyApp({ Component, pageProps }) {
 export default MyApp;
 ```
 
+
+<img src="http://localhost:3000/nextjs.png" alt="Next.jsのWelcomeページ" width="500" height="200" />
+
+
 [戻る](/)
