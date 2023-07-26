@@ -40,9 +40,9 @@ export async function getStaticProps({ params }: Params) {
     .use(remarkToc, {
       heading: '目次'
     })
-    .use(remarkRehype)
+    .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeSlug)
-    .use(rehypeStringify)
+    .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content)
 
   return {
@@ -114,7 +114,8 @@ const toReactNode = (content: any) => {
       createElement,
       Fragment,
       components: {
-        a: MyLink
+        a: MyLink,
+        img: MyImage
       }
     })
     .processSync(content).result
@@ -132,6 +133,10 @@ const MyLink = ({ children, href }: any) => {
       { children }
     </a>
   )
+}
+
+const MyImage = ({ src, alt, ...props }: any) => {
+  return <Image src={src} alt={alt} {...props} />
 }
 
 export default Post
