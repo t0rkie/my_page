@@ -3,6 +3,7 @@ title: 'キャッシュ入門00'
 date: '2022-07-07'
 description: 'キャッシュの入門記事です'
 image: nextjs.png
+categories: ['react']
 ---
 
 ## Table of Contents
