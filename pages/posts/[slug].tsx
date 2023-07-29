@@ -1,6 +1,7 @@
 import fs from 'fs'
 import matter from 'gray-matter'
 import { unified } from 'unified'
+import { toc } from 'mdast-util-toc'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
@@ -45,10 +46,22 @@ export async function getStaticProps({ params }: Params) {
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content)
 
+  const toc = await unified()
+    .use(remarkParse)
+    .use(getToc, {
+      heading: '目次',
+      tight: true,
+    })
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process(content)
+
   return {
     props: {
       frontMatter: data,
-      content: result.toString()
+      content: result.toString(),
+      toc: toc.toString(),
+      slug: params.slug
     }
   }
 }
@@ -110,7 +123,15 @@ const Post = ({ frontMatter, content, slug }: Props) => {
             </span>
           ))}
         </div>
-        { toReactNode(content) }
+        <div className="grid grid-cols-12">
+          <div className="col-span-9">{toReactNode(content)}</div>
+          <div className="col-span-3">
+            <div
+              className="sticky top-[50px]"
+              dangerouslySetInnerHTML={{ __html: toc }}
+            ></div>
+          </div>
+        </div>
       </div>
     </>
   )
@@ -148,6 +169,13 @@ const MyLink = ({ children, href }: any) => {
 
 const MyImage = ({ src, alt, ...props }: any) => {
   return <Image src={src} alt={alt} {...props} />
+}
+
+const getToc = (options: any) => {
+  return (node: any) => {
+    const result = toc(node, options)
+    node.children = [result.map]
+  }
 }
 
 export default Post
