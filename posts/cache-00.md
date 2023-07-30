@@ -6,9 +6,11 @@ image: nextjs.png
 categories: ['react']
 ---
 
-## Table of Contents
+test
 
-キャッシュの性質
+## 目次
+
+# キャッシュの性質
 
 - 特定のクライアントのみが参照可能なキャッシュ (private cache)
 - 複数のクライアントから参照可能なキャッシュ (shared cache)
