@@ -129,7 +129,7 @@ const Post = ({ frontMatter, content, slug }: Props) => {
             <div
               className="sticky top-[50px]"
               dangerouslySetInnerHTML={{ __html: toc }}
-            ></div>
+            />
           </div>
         </div>
       </div>
