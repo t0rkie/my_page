@@ -25,6 +25,7 @@ interface Params {
 interface Props {
   frontMatter: any
   content: any,
+  toc: any,
   slug: String
 }
 
@@ -46,6 +47,7 @@ export async function getStaticProps({ params }: Params) {
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(content)
 
+  // TODO: サイドバーに目次表示
   const toc = await unified()
     .use(remarkParse)
     .use(getToc, {
@@ -79,7 +81,7 @@ export async function getStaticPaths() {
   }
 }
 
-const Post = ({ frontMatter, content, slug }: Props) => {
+const Post = ({ frontMatter, content, toc, slug }: Props) => {
   return (
     <>
       <NextSeo
@@ -171,8 +173,10 @@ const MyImage = ({ src, alt, ...props }: any) => {
   return <Image src={src} alt={alt} {...props} />
 }
 
-const getToc = (options: any) => {
-  return (node: any) => {
+// @ts-ignore
+const getToc = (options) => {
+  // @ts-ignore
+  return (node) => {
     const result = toc(node, options)
     node.children = [result.map]
   }
