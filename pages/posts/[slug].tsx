@@ -1,5 +1,6 @@
 import fs from 'fs'
 import matter from 'gray-matter'
+import { branchName } from '@/utils/constants';
 import { unified } from 'unified'
 import { toc } from 'mdast-util-toc'
 import remarkParse from 'remark-parse'
@@ -106,7 +107,7 @@ const Post = ({ frontMatter, content, toc, slug }: Props) => {
       <div className='prose prose-lg max-w-none'>
         <div className='border'>
           <Image
-            src={`/${frontMatter.image}`}
+            src={`${branchName}/${frontMatter.image}`}
             width={1200}
             height={700}
             alt={frontMatter.title}

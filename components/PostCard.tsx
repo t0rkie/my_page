@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link';
+import { branchName } from '@/utils/constants';
 
 interface Post {
   post: {
@@ -9,13 +10,11 @@ interface Post {
 }
 
 const PostCard = ({ post }: Post) => {
-  const branchName = process.env.BRANCH_NAME ? "/" + process.env.BRANCH_NAME : "/";
-
   return (
     <Link href={`/posts/${post.slug}`}>
       <div className='border roounded-lg'>
         <Image
-          src={`${branchName}${post.frontMatter.image}`}
+          src={`${branchName}/${post.frontMatter.image}`}
           width={1200}
           height={700}
           alt={post.frontMatter.title}
