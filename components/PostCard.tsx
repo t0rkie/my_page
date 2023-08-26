@@ -13,7 +13,7 @@ const PostCard = ({ post }: Post) => {
     <Link href={`/posts/${post.slug}`}>
       <div className='border roounded-lg'>
         <Image
-          src={`/${post.frontMatter.image}`}
+          src={`/images/${post.frontMatter.image}`}
           width={1200}
           height={700}
           alt={post.frontMatter.title}
