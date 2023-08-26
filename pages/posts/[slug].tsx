@@ -54,6 +54,7 @@ export async function getStaticProps({ params }: Params) {
       heading: '目次',
       tight: true,
     })
+    // @ts-ignore
     .use(remarkRehype)
     .use(rehypeStringify)
     .process(content)
